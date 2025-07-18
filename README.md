@@ -43,13 +43,3 @@ A modern and responsive **Quiz Application** built using **Ionic Framework** wit
     ionic capacitor add android
     ionic capacitor run android
     ```
-
-## 📁 Project Structure
-    ```
-    src/
-    ├── app/              # Angular app modules and components
-    ├── assets/           # Static assets like icons, images, etc.
-    ├── environments/     # Environment configuration files
-    ├── theme/            # App-wide styles
-    └── index.html        # Main entry point
-    ```

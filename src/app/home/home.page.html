@@ -6,7 +6,50 @@
     </ion-card-title>
 
     <ion-card-content>
-      <form [formGroup]="form()!"></form>
+      <form [formGroup]="form()!">
+
+        <ion-item lines="none" color="light">
+          <ion-input placeholder="No. of questions" type="number" formControlName="question_count" errorText="*Enter proper number"></ion-input>
+          <ion-text slot="end">out of 500</ion-text>
+        </ion-item>
+        
+        <ion-item lines="none" color="light" class="ion-margin-top">
+          <ion-select 
+            label="Category" 
+            labelPlacement="fixed" 
+            interface="popover" 
+            formControlName="category_id" 
+            placeholder="Select Category">
+            @for(category of categories(); track $index) {
+              <ion-select-option [value]="category.id">
+                {{category?.name}}
+              </ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+        
+        <ion-item lines="none" color="light" class="ion-margin-top">
+          <ion-label> Duration (hh:mm) </ion-label>
+          <ion-datetime-button
+            datetime="datetime"
+            slot="end"></ion-datetime-button>
+
+          <ion-modal [keepContentsMounted]="true">
+            <ng-template>
+              <ion-datetime
+                id="datetime"
+                formControlName="duration"
+                presentation="time"
+                hourCycle="h23"
+                [showDefaultButtons]="true"
+                [formatOptions]="{
+                  time: { hour: '2-digit', minute: '2-digit'},
+                }"></ion-datetime>
+            </ng-template>
+          </ion-modal>
+        </ion-item>
+
+      </form>
     </ion-card-content>
   </ion-card>
 </ion-content>
