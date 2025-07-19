@@ -10,7 +10,7 @@
 
         <ion-item lines="none" color="light">
           <ion-input placeholder="No. of questions" type="number" formControlName="question_count" errorText="*Enter proper number"></ion-input>
-          <ion-text slot="end">out of 500</ion-text>
+          <ion-text slot="end">out of {{masterSettings().questionsMaxLimit}}</ion-text>
         </ion-item>
         
         <ion-item lines="none" color="light" class="ion-margin-top">
@@ -27,6 +27,13 @@
             }
           </ion-select>
         </ion-item>
+
+        @let formData = form()!.get('category_id');
+        @if(formData?.invalid && formData?.touched){
+          <div>
+            <ion-text class="errorMessage" color="danger">*Please select a category*</ion-text>
+          </div>
+        }
         
         <ion-item lines="none" color="light" class="ion-margin-top">
           <ion-label> Duration (hh:mm) </ion-label>
@@ -48,6 +55,18 @@
             </ng-template>
           </ion-modal>
         </ion-item>
+
+        @if(isLoading()){
+          <ion-button>
+            <ion-spinner name="cresent"></ion-spinner>
+          </ion-button>
+        }
+        @else {
+          <ion-button (click)="onSubmit()" class="play">
+            PLAY
+            <ion-icon name="arrow-forward-circle-outline" slot="end"></ion-icon>
+          </ion-button>
+        }
 
       </form>
     </ion-card-content>

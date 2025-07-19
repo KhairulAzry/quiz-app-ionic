@@ -1,0 +1,26 @@
+ion-content {
+  --background: var(--ion-background-gradient);
+  ion-card {
+    position: absolute;
+    top: 35%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust for the card's dimensions */
+    width: 90%; /* Optional: Adjust width for responziveness */
+    max-width: 400px; /* Optional: Limit maximum width */
+    margin: auto;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Add subtle shadow */
+
+    ion-item {
+      border-radius: 10px;
+    }
+
+    ion-button.play{
+      margin-top: 2vh;
+      float: inline-end;
+    }
+
+    .errorMessage{
+      font-size: small;
+    }
+  }
+}
