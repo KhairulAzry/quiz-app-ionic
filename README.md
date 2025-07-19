@@ -19,8 +19,8 @@ A modern and responsive **Quiz Application** built using **Ionic Framework** wit
 
 1. **Clone the repository** 
    ```bash
-   git clone https://github.com/YOUR_USERNAME/quiz-app.git
-   cd quiz-app
+   git clone https://github.com/KhairulAzry/quiz-app-ionic.git
+   cd quiz-app-ionic
    ```
 
 2. **Install dependencies**
