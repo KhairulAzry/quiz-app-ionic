@@ -5,11 +5,19 @@
       <ion-card-subtitle>Time for quiz</ion-card-subtitle>
     </ion-card-title>
 
+    @let formData = form()!;
+
     <ion-card-content>
-      <form [formGroup]="form()!">
+      <form [formGroup]="formData">
+
+        @let is_error_message = formData.get('question_count')?.errors?.['maxLimit'];
 
         <ion-item lines="none" color="light">
-          <ion-input placeholder="No. of questions" type="number" formControlName="question_count" errorText="*Enter proper number"></ion-input>
+          <ion-input 
+            placeholder="No. of questions" 
+            type="number" 
+            formControlName="question_count" 
+            [errorText]="is_error_message || '*Enter proper number'"></ion-input>
           <ion-text slot="end">out of {{masterSettings().questionsMaxLimit}}</ion-text>
         </ion-item>
         
@@ -28,12 +36,13 @@
           </ion-select>
         </ion-item>
 
-        @let formData = form()!.get('category_id');
-        @if(formData?.invalid && formData?.touched){
+        @let category_id = formData.get('category_id');
+
+        @if(category_id?.invalid && category_id?.touched){
           <div>
             <ion-text class="errorMessage" color="danger">*Please select a category*</ion-text>
           </div>
-        }
+        } 
         
         <ion-item lines="none" color="light" class="ion-margin-top">
           <ion-label> Duration (hh:mm) </ion-label>
@@ -55,6 +64,21 @@
             </ng-template>
           </ion-modal>
         </ion-item>
+
+        @let duration = formData.get('duration');
+
+        @if(duration?.invalid && duration?.touched){
+          <div>
+            <ion-text class="errorMessage" color="danger">
+              @let checkErr = duration!.errors?.['invalidDuration'];
+              @if(checkErr){
+                {{ checkErr }}
+              } @else {
+                *Please select a duration
+              }
+            </ion-text>
+          </div>
+        } 
 
         @if(isLoading()){
           <ion-button>

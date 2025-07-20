@@ -1,11 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { IonContent, IonCard, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput, IonText, IonSelect, IonSelectOption, IonLabel, IonDatetimeButton, IonModal, IonDatetime, IonButton, IonSpinner, IonIcon, } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { arrowForwardCircleOutline } from 'ionicons/icons';
 import { QuizService } from '../services/quiz/quiz.service';
 import { Category } from '../interfaces/category.interface';
 import { CategoryService } from '../services/category/category.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -42,6 +43,7 @@ export class HomePage {
   masterSettings = computed(() => this.quizService.masterSettings)
 
   private formBuilder = inject(FormBuilder);
+  private router = inject(Router);
   private quizService = inject(QuizService);
   private categoryService = inject(CategoryService);
 
@@ -62,16 +64,41 @@ export class HomePage {
         this.masterSettings().questionsMaxLimit
       ),],],
       category_id: [null, [Validators.required]],
-      duration: [this.toIsoDateTime(), [Validators.required]],
+      duration: [this.toIsoDateTime(), [Validators.required, this.durationValidator()]],
     });
 
     this.form.set(form);
   }
 
-  maxQuestionCountValidator(max: number){
+  private maxQuestionCountValidator(max: number){
     return (control: AbstractControl): ValidationErrors | null => {
-      return control.value !== null && control.value > max ? { maxLimit: `Cannot exceed ${max} questions`} : null;
+      return control.value !== null && control.value > max 
+        ? { maxLimit: `Cannot exceed ${max} questions`} 
+        : null;
     };
+  }
+
+  private durationValidator(): ValidatorFn {
+    return(control: AbstractControl): ValidationErrors | null => {
+    return this.parseDuration(control.value) === 0 
+      ? { invalidDuration: 'Duration cannot be 00:00'} 
+      : null;
+    }
+  }
+
+  private parseDuration(duration: string): number {
+    if (!duration || !duration.includes('T')) return 0; // Handle invalid inputs
+
+    const timePart = duration.split('T')[1]; // Extract HH:mm:ss part
+    if (!timePart) return 0;
+
+    const [hours, minutes, seconds] = timePart.split(':').map(Number);
+
+    return (
+      (hours || 0) * 3600 * 1000 +
+      (minutes || 0) * 60 * 1000 +
+      (seconds || 0) * 1000
+    );
   }
 
   getCategories(){
@@ -104,11 +131,29 @@ export class HomePage {
     return `${year}-${month}-${dateOfMonth}T${hour}:${minute}:00`;
   }
 
+  setLoader(value: boolean){
+    this.isLoading.set(value);
+  }
+
   onSubmit() {
     if(this.form()?.invalid){
       this.form()!.markAllAsTouched();
       return;
     }
-    console.log(this.form()!.value);
+
+    const formValue = this.form()!.value;
+
+    console.log(formValue);
+
+    try {
+      this.setLoader(true);
+      this.quizService.fetchQuestions(formValue);
+      this.router.navigate(['/', 'home', 'quiz']);
+    } catch(e) {
+      console.log(e);
+      this.setLoader(false);
+    } finally {
+      this.setLoader(false);
+    }
   }
 }

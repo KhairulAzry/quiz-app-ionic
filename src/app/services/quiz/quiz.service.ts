@@ -13,4 +13,12 @@ export class QuizService {
   }
 
   constructor() { }
+
+  fetchQuestions(formValue: { 
+    question_count: number, 
+    category_id: string,
+    duration: any
+  }) {
+    return[];
+  }
 }
