@@ -1,12 +1,12 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { IonContent, IonCard, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput, IonText, IonSelect, IonSelectOption, IonLabel, IonDatetimeButton, IonModal, IonDatetime, IonButton, IonSpinner, IonIcon, } from '@ionic/angular/standalone';
+import { IonContent, IonCard, IonCardTitle, IonCardSubtitle, IonCardContent, IonItem, IonInput, IonText, IonSelect, IonSelectOption, IonLabel, IonDatetimeButton, IonModal, IonDatetime, IonButton, IonButtons, IonSpinner, IonIcon, IonHeader, IonToolbar, IonTitle, } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { arrowForwardCircleOutline } from 'ionicons/icons';
+import { arrowForwardCircleOutline, cog } from 'ionicons/icons';
 import { QuizService } from '../services/quiz/quiz.service';
 import { Category } from '../interfaces/category.interface';
 import { CategoryService } from '../services/category/category.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -14,24 +14,29 @@ import { Router } from '@angular/router';
   styleUrls: ['home.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
+    IonButton,
+    IonButtons,
     IonCard, 
-    IonCardTitle, 
-    IonCardSubtitle, 
     IonCardContent,
-    ReactiveFormsModule,
-    IonItem,
-    IonInput,
-    IonText,
-    IonSelect,
-    IonSelectOption,
-    IonLabel,
+    IonCardSubtitle, 
+    IonCardTitle, 
+    IonContent, 
     IonDatetime,
     IonDatetimeButton,
+    IonHeader,
+    IonIcon,
+    IonInput,
+    IonItem,
+    IonLabel,
     IonModal,
-    IonButton,
+    IonSelect,
+    IonSelectOption,
     IonSpinner,
-    IonIcon
+    IonText,
+    IonTitle,
+    IonToolbar,
+    ReactiveFormsModule,
+    RouterLink,
   ],
 })
 export class HomePage {
@@ -50,6 +55,7 @@ export class HomePage {
   constructor() {
     addIcons({
       arrowForwardCircleOutline,
+      cog,
     });
     this.initForm();
   }
